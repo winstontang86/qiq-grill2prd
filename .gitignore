@@ -1,0 +1,22 @@
+# ---- 构建产物 ----
+dist/
+*.zip
+
+# ---- 编辑器 / IDE ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ---- 操作系统 ----
+.DS_Store
+Thumbs.db
+
+# ---- 临时与日志 ----
+*.log
+*.tmp
+.tmp/
+
+# ---- skill 运行时产出（用户仓库使用本 skill 时才会产生，本仓库不应提交）----
+.qiqskills/
