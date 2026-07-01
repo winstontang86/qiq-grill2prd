@@ -31,12 +31,22 @@ SKILL_NAME="qiq-grill2prd"
 if [[ $# -ge 1 && -n "$1" ]]; then
   VERSION="$1"
 else
-  DATE_TAG="$(date +%Y%m%d)"
-  if git rev-parse --short HEAD >/dev/null 2>&1; then
-    SHA_TAG="$(git rev-parse --short HEAD)"
-    VERSION="${DATE_TAG}-${SHA_TAG}"
+  # 优先从 SKILL.md 的 frontmatter 中提取 version 字段
+  if [[ -f "$REPO_ROOT/SKILL.md" ]]; then
+    FRONTMATTER_VERSION=$(sed -n '/^---$/,/^---$/p' "$REPO_ROOT/SKILL.md" | sed -n 's/^version: *//p' | head -1)
+  fi
+  if [[ -n "${FRONTMATTER_VERSION:-}" ]]; then
+    VERSION="$FRONTMATTER_VERSION"
+    echo "==> 从 SKILL.md frontmatter 读取版本: $VERSION"
   else
-    VERSION="${DATE_TAG}"
+    DATE_TAG="$(date +%Y%m%d)"
+    if git rev-parse --short HEAD >/dev/null 2>&1; then
+      SHA_TAG="$(git rev-parse --short HEAD)"
+      VERSION="${DATE_TAG}-${SHA_TAG}"
+    else
+      VERSION="${DATE_TAG}"
+    fi
+    echo "==> 自动生成版本: $VERSION"
   fi
 fi
 
